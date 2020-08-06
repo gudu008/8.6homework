@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0" >
+    <title>Title</title>
+<link rel="stylesheet" href="swiper-bundle.min.css">
+    <style>
+        .swiper-container {
+            width: 100%;
+            height: 203px;
+        }
+        .swiper-slide img{
+            width: 100%;
+        }
+        .box img{
+            width: 359px;
+        }
+    </style>
+    <script src="../js/jquery-3.5.1.min.js"></script>
+    <script src="../js/hammer.min.js"></script>
+    <script src="../js/jquery.hammer.js"></script>
+</head>
+<body>
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <img src="03.jpg">
+        </div>
+        <div class="swiper-slide">
+            <img src="03.jpg">
+        </div>
+        <div class="swiper-slide">
+            <img src="03.jpg">
+        </div>
+    </div>
+    <!-- 如果需要分页器 -->
+    <div class="swiper-pagination"></div>
+
+    <!-- 如果需要导航按钮 -->
+<!--    <div class="swiper-button-prev"></div>-->
+<!--    <div class="swiper-button-next"></div>-->
+
+    <!-- 如果需要滚动条 -->
+    <div class="swiper-scrollbar"></div>
+</div>
+<div class="box" style="width: 1200px; height: 205px; position: absolute;border: 1px solid black">
+    <img src="03.jpg">
+    <img src="03.jpg">
+    <img src="03.jpg">
+</div>
+<script src="swiper-bundle.min.js"></script>
+<script>
+    var mySwiper = new Swiper ('.swiper-container', {
+        // direction: 'vertical', // 垂直切换选项
+        loop: true, // 循环模式选项
+
+        // 如果需要分页器
+        pagination: {
+            el: '.swiper-pagination',
+        },
+
+        // 如果需要前进后退按钮
+        // navigation: {
+        //     nextEl: '.swiper-button-next',
+        //     prevEl: '.swiper-button-prev',
+        // },
+
+        // 如果需要滚动条
+        scrollbar: {
+            el: '.swiper-scrollbar',
+        },
+    })
+</script>
+<script>
+
+<!--左右滑动效果封装-->
+    function drag(selector) {
+        var startplace;
+        var flag=true;
+        $(selector).hammer().bind("panstart",function (ev) {
+            startplace=$(this).position().left;
+        })
+        $(selector).hammer().bind("panleft",function (ev) {
+            var lefts=startplace+ev.gesture.deltaX;
+            if(Math.abs(lefts)>$(this).width()-$(this).parent().width()){
+                lefts=-($(this).width()-$(this).parent().width());
+            }
+            $(this).css({
+                left:lefts
+            })
+            $(selector).hammer().bind("panright",function () {
+                $(this).css({
+                    left:0
+                })
+            })
+        })
+        if(flag){
+            $(selector).hammer().bind("panright",function (ev) {
+                flag=false;
+                var rights=startplace+ev.gesture.deltaX;
+                if(rights>0){
+                    rights=0;
+                }
+                $(this).css({
+                    left:rights
+                })
+                $(selector).hammer().bind("panleft",function () {
+                    $(this).css({
+                        left:0
+                    })
+                    flag=true;
+                })
+            })
+        }
+
+    }
+    drag(".box");
+</script>
+</body>
+</html>
